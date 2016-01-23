@@ -1,0 +1,27 @@
+postgres1:
+  environment:
+    - POSTGRESQL_USER=test
+    - POSTGRESQL_PASS=password
+    - POSTGRESQL_DB=test
+  image: orchardup/postgresql
+  ports:
+    - "49015:5432"
+postgres2:
+  environment:
+    - POSTGRESQL_USER=test
+    - POSTGRESQL_PASS=password
+    - POSTGRESQL_DB=test
+  image: orchardup/postgresql
+  ports:
+    - "49014:5432"
+pgpool:
+  build: ../../.
+  ports:
+    - "49013:9999"
+  links:
+    - postgres1
+    - postgres2
+  volumes:
+    - "/home/server/pg-pool/config/pgpool/pgpool.conf:/etc/pgpool/pgpool.conf"
+    - "/home/server/pg-pool/config/pgpool/pool_passwd:/etc/pgpool/pool_passwd"
+    - "/home/server/pg-pool/config/pgpool/pool_hba.conf:/etc/pgpool/pool_hba.conf"
