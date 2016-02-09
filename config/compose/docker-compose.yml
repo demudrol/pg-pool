@@ -1,27 +1,26 @@
-postgres1:
+postgres-pool:
   environment:
-    - POSTGRESQL_USER=test
+    - POSTGRESQL_USER=moltin
     - POSTGRESQL_PASS=password
-    - POSTGRESQL_DB=test
+    - POSTGRESQL_DB=moltin
   image: orchardup/postgresql
   ports:
     - "49015:5432"
-postgres2:
-  environment:
-    - POSTGRESQL_USER=test
-    - POSTGRESQL_PASS=password
-    - POSTGRESQL_DB=test
-  image: orchardup/postgresql
-  ports:
-    - "49014:5432"
 pgpool:
   build: ../../.
   ports:
     - "49013:9999"
   links:
-    - postgres1
-    - postgres2
+    - postgres-pool
+  external_links:
+    - compose_postgres_1:postgres2
+  privileged: true
   volumes:
     - "/home/server/pg-pool/config/pgpool/pgpool.conf:/etc/pgpool/pgpool.conf"
     - "/home/server/pg-pool/config/pgpool/pool_passwd:/etc/pgpool/pool_passwd"
-    - "/home/server/pg-pool/config/pgpool/pool_hba.conf:/etc/pgpool/pool_hba.conf"
+    - "/home/server/pg-pool/config/pgpool/pool_hba.conf:/usr/local/etc/pool_hba.conf"
+    - "/home/server/pg-pool/config/runtime/pgpool_configure.sh:/tmp/pgpool_configure.sh"
+  environment:
+    - "DB_0=backend_hostname0='postgres-pool';backend_port0=5432;backend_weight0=1;backend_flag0='ALLOW_TO_FAILOVER'"
+    - "DB_1=backend_hostname1='postgres2';backend_port1=5432;backend_weight1=1;backend_flag1='ALLOW_TO_FAILOVER'"
+    - BOX_HOSTNAME=collectd.local
