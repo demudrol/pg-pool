@@ -63,15 +63,15 @@ RUN cd /tmp && wget https://github.com/papertrail/remote_syslog2/releases/downlo
     mkdir /var/log/remote-syslog
 
 # Install collectd for stats
-RUN curl -s https://metrics-api.librato.com/agent_installer/813f09207093901f | bash
+#RUN curl -s https://metrics-api.librato.com/agent_installer/813f09207093901f | bash
 
 # cleanup collectd
-RUN rm /opt/collectd/etc/collectd.conf.d/docker.conf
-RUN rm /opt/collectd/etc/collectd.conf.d/memcached.conf
-RUN rm /opt/collectd/etc/collectd.conf.d/nginx.conf
-RUN rm /opt/collectd/etc/collectd.conf.d/nginx_plus.conf
-RUN rm /opt/collectd/etc/collectd.conf.d/redis.conf
-RUN rm /opt/collectd/etc/collectd.conf.d/varnish.conf
+#RUN rm /opt/collectd/etc/collectd.conf.d/docker.conf
+#RUN rm /opt/collectd/etc/collectd.conf.d/memcached.conf
+#RUN rm /opt/collectd/etc/collectd.conf.d/nginx.conf
+#RUN rm /opt/collectd/etc/collectd.conf.d/nginx_plus.conf
+#RUN rm /opt/collectd/etc/collectd.conf.d/redis.conf
+#RUN rm /opt/collectd/etc/collectd.conf.d/varnish.conf
 
 # Add in the various supervisor pieces
 ADD ./config/supervisor/supervisor.conf /etc/supervisor/conf.d/supervisor.conf
@@ -81,8 +81,8 @@ ADD ./config/runtime/pgpool_configure.sh /tmp/pgpool_configure.sh
 RUN chmod +x /tmp/pgpool_configure.sh
 
 # Add in runtime script
-ADD ./config/runtime/script.sh /tmp/script.sh
-RUN chmod +x /tmp/script.sh
+ADD ./config/runtime/runtime.sh /tmp/runtime.sh
+RUN chmod +x /tmp/runtime.sh
 
 # Run the box
-ENTRYPOINT ["/tmp/script.sh"]
+ENTRYPOINT ["/tmp/runtime.sh"]

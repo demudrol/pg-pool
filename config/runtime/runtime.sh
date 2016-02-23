@@ -8,7 +8,7 @@ sudo sysctl -w kernel.shmmax=134217728
 sudo printf '\nkernel.shmmax = 134217728' >> /etc/sysctl.conf
 
 # Run the pgpool upstream configure
-cd /tmp && ./pgpool_configure.sh
+/tmp/pgpool_configure.sh
 
 # Start supervisor
 service supervisor stop
